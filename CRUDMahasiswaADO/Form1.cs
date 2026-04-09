@@ -175,4 +175,40 @@ namespace CRUDMahasiswaADO
             }
         }
 
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DialogResult confirm = MessageBox.Show(
+                    "Yakin ingin menghapus?",
+                    "Konfirmasi",
+                    MessageBoxButtons.YesNo);
+
+                if (confirm == DialogResult.Yes)
+                {
+                    using (SqlConnection conn = new SqlConnection(connectionString))
+                    {
+                        conn.Open();
+
+                        string query = "DELETE FROM Mahasiswa WHERE NIM = @NIM";
+                        SqlCommand cmd = new SqlCommand(query, conn);
+                        cmd.Parameters.AddWithValue("@NIM", txtNIM.Text);
+
+                        int result = cmd.ExecuteNonQuery();
+
+                        if (result > 0)
+                        {
+                            MessageBox.Show("Data berhasil dihapus");
+                            ClearForm();
+                            btnLoad.PerformClick();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+        }
+
         
